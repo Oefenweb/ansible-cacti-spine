@@ -1,0 +1,85 @@
+# tasks file for cacti-spine
+---
+- name: install dependencies
+  apt:
+    name: "{{ cacti_spine_dependencies }}"
+    state: "{{ apt_install_state | default('latest') }}"
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+  tags:
+    - configuration
+    - cacti-spine
+    - cacti-spine-dependencies
+
+- name: create (checkout) directory
+  file:
+    path: /var/lib/ansible/cacti-spine/checkouts
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  tags:
+    - configuration
+    - cacti-spine
+    - cacti-spine-checkout
+
+- name: checkout repository
+  git:
+    repo: "{{ cacti_spine_git_repo }}"
+    dest: "{{ cacti_spine_checkout_path }}"
+    version: "{{ cacti_spine_version }}"
+    force: true
+  register: _git_checkout
+  tags:
+    - configuration
+    - cacti-spine
+    - cacti-spine-checkout
+
+- name: build and install
+  shell: >
+    true \
+    && ./bootstrap \
+    && ./configure {{ cacti_spine_configure_options | join(' ') }} \
+    && make -j{{ ansible_processor_cores + 1 }} \
+    && make install \
+    && chown root:root {{ cacti_spine_install_prefix }}/bin/spine \
+    && chmod u+s {{ cacti_spine_install_prefix }}/bin/spine
+  args:
+    chdir: "{{ cacti_spine_checkout_path }}"
+  when: _git_checkout is changed
+  tags:
+    - configuration
+    - cacti-spine
+    - cacti-spine-build-and-install
+
+- name: cleanup build
+  shell: >
+    git reset --hard && git clean -d -x -f
+  args:
+    chdir: "{{ cacti_spine_checkout_path }}"
+  when: _git_checkout is changed
+  tags:
+    - configuration
+    - cacti-spine
+    - cacti-spine-cleanup-build
+
+- name: update configuration file
+  template:
+    src: etc/spine.conf.j2
+    dest: "{{ cacti_spine_etc_spine_conf_file }}"
+    owner: root
+    group: root
+    mode: 0640
+  tags:
+    - configuration
+    - cacti-spine
+    - cacti-spine-configuration
+
+- name: verify
+  command: >
+    {{ cacti_spine_install_prefix }}/bin/spine --version
+  changed_when: false
+  tags:
+    - configuration
+    - cacti-spine
+    - cacti-spine-verify

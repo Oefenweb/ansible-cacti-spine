@@ -1,0 +1,7 @@
+# test file for cacti-spine
+---
+- hosts: localhost
+  connection: local
+  become: true
+  roles:
+    - ../../

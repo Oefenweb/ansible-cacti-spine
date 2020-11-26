@@ -1,0 +1,102 @@
+---
+sudo: required
+dist: xenial
+
+language: python
+python:
+  - "2.7"
+  - "3.5"
+
+env:
+  - ANSIBLE_VERSION=latest
+  - ANSIBLE_VERSION=2.10.1
+  - ANSIBLE_VERSION=2.10.0
+  - ANSIBLE_VERSION=2.9.14
+  - ANSIBLE_VERSION=2.9.13
+  - ANSIBLE_VERSION=2.9.12
+  - ANSIBLE_VERSION=2.9.11
+  - ANSIBLE_VERSION=2.9.10
+  - ANSIBLE_VERSION=2.9.9
+  - ANSIBLE_VERSION=2.9.8
+  - ANSIBLE_VERSION=2.9.7
+  - ANSIBLE_VERSION=2.9.6
+  - ANSIBLE_VERSION=2.9.5
+  - ANSIBLE_VERSION=2.9.4
+  - ANSIBLE_VERSION=2.9.3
+  - ANSIBLE_VERSION=2.9.2
+  - ANSIBLE_VERSION=2.9.1
+  - ANSIBLE_VERSION=2.9.0
+  - ANSIBLE_VERSION=2.8.16
+  - ANSIBLE_VERSION=2.8.15
+  - ANSIBLE_VERSION=2.8.14
+  - ANSIBLE_VERSION=2.8.13
+  - ANSIBLE_VERSION=2.8.12
+  - ANSIBLE_VERSION=2.8.11
+  - ANSIBLE_VERSION=2.8.10
+  - ANSIBLE_VERSION=2.8.9
+  - ANSIBLE_VERSION=2.8.8
+  - ANSIBLE_VERSION=2.8.7
+  - ANSIBLE_VERSION=2.8.6
+  - ANSIBLE_VERSION=2.8.5
+  - ANSIBLE_VERSION=2.8.4
+  - ANSIBLE_VERSION=2.8.3
+  - ANSIBLE_VERSION=2.8.2
+  - ANSIBLE_VERSION=2.8.1
+  - ANSIBLE_VERSION=2.8.0
+
+jobs:
+  include:
+    - python: "3.8"
+      env: ANSIBLE_VERSION=latest ANSIBLE_LINT_VERSION=latest
+  exclude:
+    - python: "2.7"
+      env: ANSIBLE_VERSION=latest
+    - python: "2.7"
+      env: ANSIBLE_VERSION=2.10.2
+    - python: "2.7"
+      env: ANSIBLE_VERSION=2.10.1
+
+branches:
+  only:
+    - master
+
+before_install:
+  - sudo apt-get update -qq
+
+install:
+  # Install Ansible.
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
+  - >
+    if [ -n "$ANSIBLE_LINT_VERSION" ]; then
+      if [ "$ANSIBLE_LINT_VERSION" = "latest" ]; then
+        pip install ansible-lint;
+      else
+        pip install ansible-lint==$ANSIBLE_LINT_VERSION;
+      fi
+    fi
+
+script:
+  # Check the role/playbook's syntax.
+  - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
+
+  # Run the role/playbook with ansible-playbook.
+  - ansible-playbook -i tests/inventory tests/test.yml -vvvv
+
+  # Run the role/playbook again, checking to make sure it's idempotent.
+  - >
+    ansible-playbook -i tests/inventory tests/test.yml
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  - >
+    if [ -n "$ANSIBLE_LINT_VERSION" ]; then
+      ansible-lint tests/test.yml;
+    fi
+
+notifications:
+  email: false
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  slack:
+    rooms:
+      secure: "gDmi1fKCsPe/jCTTU+/Fr5EsDMtHL4vKtxyluYWwLgf7MHSuTNo3Y1qol3r7fYCNzs+YWBrY/vt0iNRg6WkrGunMudEacaPBTqH6hWv4JViMnDTa0EZkuE7zkSJDnI8MArtHZjOqLyCoEAfO9qX7joHn1Y47Zfzao8dJr590dwClb6wS70BXWhJqHe/gElPlemYFnmlikVDGrkjyd0JLKVdUOGk8TzZilbAHxUZXdGoxCWQM6i4oZ/mDKhsCL80nfrO9duVSDXD8Zv8ZY6ChHrqAoqZLgc5Vp/eYZ/2v7uqenwZ7vEbMpys+zOBUbcivTXsyWmXMLP58Vc0h1cURK0x5Hg+6NHwjdI11yvQ1fyMgt25OEPZPbFKCFj6L+3UaCoJuFX1NsQZpmX8AlJOZnTMe10rd862w/k6ksjkUCDqagWAFXlr6EnAu9drXZdOeoljeuIc87MzIBUnPwOA8gEi9/IwuqEG9uOWR/lE+COIELPbngDxErdJPDwIWCracdextvyhJr3rt6ahd4vwlOPItO3bMRRiaDUqbB4HF8OBmEd8BbYaNEF4jR7OSw9ZAAPMbFWcEVkVx6TllBH4L3jaiU6hRRf9QvhhWGDc217ManUk0zsbIw7d4RAjLxFUSLQle4atNFWI68h6AkYx0laeZqPmTkRnB6Q6zh6O2FCA="
