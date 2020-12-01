@@ -1,0 +1,18 @@
+# vars file for cacti-spine
+---
+cacti_spine_dependencies:
+  - autoconf
+  - automake
+  - build-essential
+  - dos2unix
+  - git
+  - gzip
+  - help2man
+  - "{{ cacti_spine_libmysqlclient_dev }}"
+  - libsnmp-dev
+  - libssl-dev
+  - libtool
+  - wget
+
+cacti_spine_checkout_path: /var/lib/ansible/cacti-spine/checkouts/cacti-spine
+cacti_spine_etc_spine_conf_file: "{{ cacti_spine_install_prefix }}/etc/spine.conf"
