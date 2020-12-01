@@ -1,7 +1,7 @@
 # defaults file for cacti-spine
 ---
 cacti_spine_git_repo: https://github.com/Cacti/spine.git
-cacti_spine_version: release/1.2.15
+cacti_spine_version: release/1.2.16
 cacti_spine_libmysqlclient_dev: libmysqlclient-dev
 cacti_spine_install_prefix: /usr/local/spine
 cacti_spine_configure_options:
@@ -70,3 +70,6 @@ cacti_spine_etc_spine_conf:
     #RDB_SSL_Key
     #RDB_SSL_Cert
     #RDB_SSL_CA
+cacti_spine_etc_spine_conf_user: root
+cacti_spine_etc_spine_conf_group: www-data
+cacti_spine_etc_spine_conf_mode: 0640

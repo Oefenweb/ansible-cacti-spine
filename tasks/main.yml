@@ -67,9 +67,9 @@
   template:
     src: etc/spine.conf.j2
     dest: "{{ cacti_spine_etc_spine_conf_file }}"
-    owner: root
-    group: root
-    mode: 0640
+    owner: "{{ cacti_spine_etc_spine_conf_user }}"
+    group: "{{ cacti_spine_etc_spine_conf_group }}"
+    mode: "{{ cacti_spine_etc_spine_conf_mode }}"
   tags:
     - configuration
     - cacti-spine
