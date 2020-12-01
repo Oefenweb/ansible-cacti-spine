@@ -1,7 +1,8 @@
 # defaults file for cacti-spine
 ---
 cacti_spine_git_repo: https://github.com/Cacti/spine.git
-cacti_spine_version: release/1.2.16
+cacti_spine_version: 1.2.16
+cacti_spine_git_version: "release/{{ cacti_spine_version }}"
 cacti_spine_libmysqlclient_dev: libmysqlclient-dev
 cacti_spine_install_prefix: /usr/local/spine
 cacti_spine_configure_options:

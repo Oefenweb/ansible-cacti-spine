@@ -27,7 +27,7 @@
   git:
     repo: "{{ cacti_spine_git_repo }}"
     dest: "{{ cacti_spine_checkout_path }}"
-    version: "{{ cacti_spine_version }}"
+    version: "{{ cacti_spine_git_version }}"
     force: true
   register: _git_checkout
   tags:
