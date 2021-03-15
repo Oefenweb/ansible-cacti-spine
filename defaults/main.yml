@@ -1,4 +1,4 @@
-# defaults file for cacti-spine
+# defaults file
 ---
 cacti_spine_git_repo: https://github.com/Cacti/spine.git
 cacti_spine_version: 1.2.16

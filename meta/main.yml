@@ -1,6 +1,7 @@
-# meta file for cacti-spine
+# meta file
 ---
 galaxy_info:
+  namespace: oefenweb
   role_name: cacti-spine
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.

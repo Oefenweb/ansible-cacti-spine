@@ -1,4 +1,4 @@
-# vars file for cacti-spine
+# vars file
 ---
 cacti_spine_dependencies:
   - autoconf
