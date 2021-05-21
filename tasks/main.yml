@@ -37,27 +37,27 @@
 
 - block:
 
-  - name: build and install
-    shell: >
-      true \
-      && ./bootstrap \
-      && ./configure {{ cacti_spine_configure_options | join(' ') }} \
-      && make -j{{ ansible_processor_cores + 1 }} \
-      && make install \
-      && chown root:root {{ cacti_spine_install_prefix }}/bin/spine \
-      && chmod u+s {{ cacti_spine_install_prefix }}/bin/spine
-    args:
-      chdir: "{{ cacti_spine_checkout_path }}"
-    tags:
-      - cacti-spine-build-and-install
+    - name: build and install
+      shell: >
+        true \
+        && ./bootstrap \
+        && ./configure {{ cacti_spine_configure_options | join(' ') }} \
+        && make -j{{ ansible_processor_cores + 1 }} \
+        && make install \
+        && chown root:root {{ cacti_spine_install_prefix }}/bin/spine \
+        && chmod u+s {{ cacti_spine_install_prefix }}/bin/spine
+      args:
+        chdir: "{{ cacti_spine_checkout_path }}"
+      tags:
+        - cacti-spine-build-and-install
 
-  - name: cleanup build
-    shell: >
-      git reset --hard && git clean -d -x -f
-    args:
-      chdir: "{{ cacti_spine_checkout_path }}"
-    tags:
-      - cacti-spine-cleanup-build
+    - name: cleanup build
+      shell: >
+        git reset --hard && git clean -d -x -f
+      args:
+        chdir: "{{ cacti_spine_checkout_path }}"
+      tags:
+        - cacti-spine-cleanup-build
 
   when: _git_checkout is changed
   tags:
