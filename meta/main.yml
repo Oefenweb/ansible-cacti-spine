@@ -2,7 +2,7 @@
 ---
 galaxy_info:
   namespace: oefenweb
-  role_name: cacti-spine
+  role_name: cacti_spine
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.
   description: Set up Spine (a poller for Cacti) in Debian-like systems

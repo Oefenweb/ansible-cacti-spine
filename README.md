@@ -1,7 +1,7 @@
 ## cacti-spine
 
-[![Build Status](https://travis-ci.org/Oefenweb/ansible-cacti-spine.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-cacti-spine)
-[![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-cacti--spine-blue.svg)](https://galaxy.ansible.com/Oefenweb/cacti-spine)
+[![CI](https://github.com/Oefenweb/ansible-cacti-spine/workflows/CI/badge.svg)](https://github.com/Oefenweb/ansible-cacti-spine/actions?query=workflow%3ACI)
+[![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-cacti--spine-blue.svg)](https://galaxy.ansible.com/Oefenweb/cacti_spine)
 
 Set up [Spine](https://github.com/Cacti/spine) (a poller for Cacti) in Debian-like systems.
 
@@ -12,7 +12,7 @@ See `vars/main.yml`
 #### Variables
 
 * `cacti_spine_git_repo`: [default: `https://github.com/Cacti/spine.git`]: Spine git repo
-* `cacti_spine_version`: [default: `1.2.16`]: Only used in `{{ cacti_spine_git_version }}`
+* `cacti_spine_version`: [default: `1.2.17`]: Only used in `{{ cacti_spine_git_version }}`
 * `cacti_spine_git_version`: [default: `"release/{{ cacti_spine_version }}"`]: What version of cacti-spine to check out (set up). This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
 * `cacti_spine_libmysqlclient_dev`: [default: `libmysqlclient-dev`]: `libmysqlclient-dev` version to install. Percona Server users might want to change this to `libperconaserverclient16-dev` (5.1), `libperconaserverclient18-dev` (5.5), `libperconaserverclient18.1-dev` (5.6) or `libperconaserverclient20-dev` (5.7).
 * `cacti_spine_install_prefix`: [default: `/usr/local/spine`]: Install prefix
@@ -28,7 +28,7 @@ None
 
 ## Recommended
 
-* `cacti-client` ([see](https://github.com/Oefenweb/ansible-cacti-client))
+* `cacti-spine` ([see](https://github.com/Oefenweb/ansible-cacti-spine))
 * `cacti-server` ([see](https://github.com/Oefenweb/ansible-cacti-server))
 * `cacti-plugin-percona` ([see](https://github.com/Oefenweb/ansible-cacti-plugin-percona))
 
