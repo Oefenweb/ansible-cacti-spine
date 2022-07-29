@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: install dependencies
-  apt:
+  ansible.builtin.apt:
     name: "{{ cacti_spine_dependencies }}"
     state: "{{ apt_install_state | default('latest') }}"
     update_cache: true
@@ -12,7 +12,7 @@
     - cacti-spine-dependencies
 
 - name: create (checkout) directory
-  file:
+  ansible.builtin.file:
     path: "{{ cacti_spine_checkout_path | dirname }}"
     state: directory
     owner: root
@@ -24,7 +24,7 @@
     - cacti-spine-checkout
 
 - name: checkout repository
-  git:
+  ansible.builtin.git:
     repo: "{{ cacti_spine_git_repo }}"
     dest: "{{ cacti_spine_checkout_path }}"
     version: "{{ cacti_spine_git_version }}"
@@ -35,10 +35,11 @@
     - cacti-spine
     - cacti-spine-checkout
 
-- block:
+- name: install  # noqa no-handler
+  block:
 
     - name: build and install
-      shell: >
+      ansible.builtin.shell: >
         true \
         && ./bootstrap \
         && ./configure {{ cacti_spine_configure_options | join(' ') }} \
@@ -48,14 +49,16 @@
         && chmod u+s {{ cacti_spine_install_prefix }}/bin/spine
       args:
         chdir: "{{ cacti_spine_checkout_path }}"
+      changed_when: true
       tags:
         - cacti-spine-build-and-install
 
-    - name: cleanup build
-      shell: >
+    - name: cleanup build  # noqa command-instead-of-module
+      ansible.builtin.shell: >
         git reset --hard && git clean -d -x -f
       args:
         chdir: "{{ cacti_spine_checkout_path }}"
+      changed_when: true
       tags:
         - cacti-spine-cleanup-build
 
@@ -65,7 +68,7 @@
     - cacti-spine
 
 - name: update configuration file
-  template:
+  ansible.builtin.template:
     src: etc/spine.conf.j2
     dest: "{{ cacti_spine_etc_spine_conf_file }}"
     owner: "{{ cacti_spine_etc_spine_conf_user }}"
@@ -77,7 +80,7 @@
     - cacti-spine-configuration
 
 - name: verify
-  command: >
+  ansible.builtin.command: >
     {{ cacti_spine_install_prefix }}/bin/spine --version
   changed_when: false
   tags:
