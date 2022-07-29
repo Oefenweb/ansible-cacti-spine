@@ -49,6 +49,7 @@
         && chmod u+s {{ cacti_spine_install_prefix }}/bin/spine
       args:
         chdir: "{{ cacti_spine_checkout_path }}"
+      changed_when: true
       tags:
         - cacti-spine-build-and-install
 
@@ -57,6 +58,7 @@
         git reset --hard && git clean -d -x -f
       args:
         chdir: "{{ cacti_spine_checkout_path }}"
+      changed_when: true
       tags:
         - cacti-spine-cleanup-build
 
