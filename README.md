@@ -40,7 +40,7 @@ None
 ---
 - hosts: all
   roles:
-    - cacti-spine
+    - oefenweb.cacti-spine
 ```
 
 ##### Advanced
@@ -49,7 +49,7 @@ None
 ---
 - hosts: all
   roles:
-    - cacti-spine
+    - oefenweb.cacti-spine
   vars:
     cacti_spine_git_repo: https://github.com/tersmitten/spine.git
     cacti_spine_git_version: fix-build-for-percona
