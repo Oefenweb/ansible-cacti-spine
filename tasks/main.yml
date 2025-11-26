@@ -36,8 +36,11 @@
     - cacti-spine-checkout
 
 - name: install  # noqa no-handler
+  when: _git_checkout is changed
+  tags:
+    - configuration
+    - cacti-spine
   block:
-
     - name: build and install
       ansible.builtin.shell: >
         true \
@@ -61,11 +64,6 @@
       changed_when: true
       tags:
         - cacti-spine-cleanup-build
-
-  when: _git_checkout is changed
-  tags:
-    - configuration
-    - cacti-spine
 
 - name: update configuration file
   ansible.builtin.template:
