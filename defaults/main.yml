@@ -73,4 +73,4 @@ cacti_spine_etc_spine_conf:
     #RDB_SSL_CA
 cacti_spine_etc_spine_conf_user: root
 cacti_spine_etc_spine_conf_group: www-data
-cacti_spine_etc_spine_conf_mode: 0640
+cacti_spine_etc_spine_conf_mode: '0640'
