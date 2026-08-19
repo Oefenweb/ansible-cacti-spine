@@ -46,7 +46,7 @@
         true \
         && ./bootstrap \
         && ./configure {{ cacti_spine_configure_options | join(' ') }} \
-        && make -j{{ ansible_processor_cores + 1 }} \
+        && make -j{{ ansible_facts['processor_cores'] + 1 }} \
         && make install \
         && chown root:root {{ cacti_spine_install_prefix }}/bin/spine \
         && chmod u+s {{ cacti_spine_install_prefix }}/bin/spine
